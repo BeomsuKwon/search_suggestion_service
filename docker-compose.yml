@@ -1,0 +1,57 @@
+version: "3.8"
+services:
+  app:
+    image: node:14-slim
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=dev
+    volumes:
+      - ./app:/home/node/app
+    networks: 
+      - local
+    ports:
+      - 8080:8080
+    depends_on:
+      - elasticsearch
+      - logstash
+    command: "npm run debug"
+  logstash:
+    build: 
+      context: ./
+      dockerfile: ./logstash/Dockerfile
+    ports:
+        - 5044:5044
+        - 9600:9600
+    volumes: 
+      - logstash-data:/usr/share/logstash/data
+    networks: 
+      - local
+    depends_on:
+      - elasticsearch
+  elasticsearch:
+    build: 
+      context: ./
+      dockerfile: ./elasticsearch/Dockerfile
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+        - elasticsearch-data:/usr/share/elasticsearch/data
+    environment: 
+      - "discovery.type=single-node"
+    networks: 
+      - local
+  kibana:
+    image: kibana:7.9.1
+    ports: 
+      - 5601:5601
+    networks:
+      - local
+    depends_on:
+      - elasticsearch
+networks:
+    local:
+volumes:
+  logstash-data:
+  elasticsearch-data:
