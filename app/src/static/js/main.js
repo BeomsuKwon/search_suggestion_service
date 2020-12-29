@@ -10,9 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(`http://localhost:8080/api/products/${keyWord}`)
       .then(res => res.json())
       .then(data => {
+        if(!data.length) return;
         data.forEach(element => {
           let option = document.createElement('option');
-          option.innerText = element;
+          option.setAttribute("value", element);
           datalist.appendChild(option);
         });
       })

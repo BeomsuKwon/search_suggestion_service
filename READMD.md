@@ -4,16 +4,6 @@
 
 - docker
 - docker-compose
-- nodejs 14
-
-## Including modules
-
-### Docker containers
-
-- elasticsearch 7.9.1
-- logstash 7.9.1
-- kibana 7.9.1
-- nodejs14
 
 ## Starting service
 
@@ -42,3 +32,10 @@ sh ./scripts/logger.sh
 - Kibana: http://localhost:5601
 - Keyword suggestion API: http://localhost:8080/api/products/?keyword
 - demo application: http://localhost:8080/html/index.html
+
+## Service Start flow
+
+1. Deploy Elasticsearch, kibana container
+2. Start logstash container
+    1. Run migration pipeline(csv to elasticsearch)
+3. Deploy Search keyword suggestion service.

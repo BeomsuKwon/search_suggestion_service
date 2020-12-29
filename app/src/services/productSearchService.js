@@ -6,29 +6,23 @@ const getProductName = async (productName) => {
   let key = String(productName);
 
   let result = await client.search({
-    index: "product_names",
+    index: "product_name",
     body: {
       query: {
         bool: {
           should: [
             {
-              fuzzy: {
-                "official name": {
-                  value: key,
-                  fuzziness: 3,
+              match: {
+                "ニックネーム.suggest": {
+                  query: key,
                 },
               },
-            },
-            {
-              prefix: {
-                "official name": {
-                  value: key,
+              match: {
+                "ニックネーム.readingform": {
+                  query: key,
+                  fuzziness: "AUTO",
+                  operator: "and",
                 },
-              },
-            },
-            {
-              match_phrase_prefix: {
-                "official name": key,
               },
             },
           ],
@@ -38,12 +32,13 @@ const getProductName = async (productName) => {
   });
 
   // Search data array
-  result = result.body['hits']['hits'];
+  result = result.body["hits"]["hits"];
 
-
-  return Promise.all(result.map(async (val) => {
-    return val['_source']['official name'];
-  }));
+  return Promise.all(
+    result.map(async (val) => {
+      return val["_source"]["ニックネーム"];
+    })
+  );
 };
 
 module.exports = { getProductName };
