@@ -2,7 +2,7 @@
 # For more information on multiple pipelines, see the documentation:
 #   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
 
-- pipeline.id: logger
-  path.config: "/usr/share/logstash/pipeline/logstash.conf"
+# - pipeline.id: logger
+#   path.config: "/usr/share/logstash/pipeline/logstash.conf"
 - pipeline.id: product_names
   path.config: "/usr/share/logstash/pipeline/csv_to_elasticsearch.conf"
